@@ -6,7 +6,7 @@ By strictly separating the structural account setup ("Taxonomy") from quarterly 
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 *   **Progressive Client Setup:** A robust taxonomy builder to define the "skeleton" of a client's wealth. Tag accounts by Owner (Client 1, Client 2, Joint) and Category (Retirement, Non-Retirement, Liability, Trust).
 *   **Intelligent Auto-Calculations:** The backend automatically calculates precise ages, aggregates joint salaries, and runs formulas for Private Reserve Targets `(6x Budget + Deductibles)`.
@@ -14,7 +14,7 @@ By strictly separating the structural account setup ("Taxonomy") from quarterly 
 *   **Pixel-Perfect PDF Generation:** Uses ReportLab's geometric primitives to dynamically draw and route exact mathematical flowcharts and quadrant-based net-worth diagrams, seamlessly mirroring the firm's premium aesthetic standards.
 *   **Glassmorphic UI:** A responsive, modern Vanilla JS single-page application (SPA) requiring zero build steps, keeping the architecture extremely maintainable for a small team.
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 *   **Backend:** Python 3, Flask
 *   **Database:** SQLite3 (Serverless, lightweight, portable)
@@ -22,7 +22,7 @@ By strictly separating the structural account setup ("Taxonomy") from quarterly 
 *   **Frontend:** Vanilla HTML5, CSS3 (Custom Glassmorphism), Vanilla JavaScript
 *   **Architecture:** Decoupled RESTful JSON API
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 c:\dev\aw-client-portal\
@@ -41,7 +41,7 @@ c:\dev\aw-client-portal\
 └── reports/                # Local directory where generated PDFs are temporarily saved
 ```
 
-## ⚙️ Local Development Setup
+## Local Development Setup
 
 To run this portal on your local machine:
 
@@ -70,15 +70,21 @@ To run this portal on your local machine:
    ```
    *Note: On its first run, `app.py` automatically initializes the `database.sqlite` file and builds the required tables using the logic in `database.py`.*
 
-5. **Access the Portal:**
-   Open your browser and navigate to `http://localhost:8080`.
+## 🌐 Deployment (Render & Railway)
 
-## 🌐 Deployment (Railway)
+This application is structurally prepared for instant deployment on PaaS platforms.
 
-This application is structurally prepared for instant deployment on [Railway](https://railway.app/). 
+### 1. Render (Recommended)
+The repository includes a `render.yaml` file for **Render Blueprints**. 
+- Go to Render -> **New Blueprint Instance** and connect this repository. Render will automatically detect the Python environment, install dependencies, and configure Gunicorn.
+- **Persistence Note:** By default, Render Web Services have ephemeral storage. To keep your SQLite database from resetting on deploy, attach a **Render Disk** to your web service and set the `RAILWAY_DATABASE_PATH` (or rename it to `DB_PATH`) environment variable to point to the mount path of the disk.
 
-- **Database Pathing:** The SQLite connection engine uses the `RAILWAY_DATABASE_PATH` environment variable out-of-the-box. When deployed, attaching a Railway persistent volume and mapping this environment variable will seamlessly persist the firm's CRM data.
-- **Port Binding:** The Flask app dynamically binds to the `PORT` environment variable required by most modern PaaS providers. 
+### 2. Railway
+The application is also configured for Railway. The SQLite connection engine uses the `RAILWAY_DATABASE_PATH` environment variable natively. Attach a Railway persistent volume and map this environment variable to seamlessly persist the firm's CRM data.
+
+### 3. Vercel (Serverless)
+The repository includes a `vercel.json` file for Serverless deployment. 
+- **Warning:** Vercel functions are read-only and ephemeral. The app uses `os.environ.get('VERCEL')` to route database writes and PDF generation to `/tmp` to prevent crashes, but all client data will be permanently wiped every few hours. Use Vercel for testing only, not for production SQLite storage.
 
 ## 🔄 Resetting the Database
 During development, if you need to completely clear all clients and accounts and reset the database schema, simply run the utility script:
