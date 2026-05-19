@@ -2,7 +2,10 @@ import sqlite3
 import json
 import os
 
-DB_PATH = os.environ.get("RAILWAY_DATABASE_PATH", "database.sqlite")
+if os.environ.get('VERCEL'):
+    DB_PATH = "/tmp/database.sqlite"
+else:
+    DB_PATH = os.environ.get("RAILWAY_DATABASE_PATH", "database.sqlite")
 
 def get_db():
     conn = sqlite3.connect(DB_PATH)
