@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AW Client Report Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">EF</div>
+                <h2>Client Portal</h2>
+            </div>
+            <nav>
+                <button class="nav-btn active" data-target="dashboard-view">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    Dashboard
+                </button>
+                <button class="nav-btn" data-target="add-client-view">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                    New Client
+                </button>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <header class="topbar">
+                <h1>Welcome back, Team</h1>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Team&background=0D8ABC&color=fff" alt="User">
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <section id="dashboard-view" class="view active">
+                <div class="view-header">
+                    <h2>Your Clients</h2>
+                    <p>Manage and generate reports for your clients.</p>
+                </div>
+                <div class="clients-grid" id="clients-grid">
+                    <div class="loading">Loading clients...</div>
+                </div>
+            </section>
+
+            <!-- Add/Edit Client View -->
+            <section id="add-client-view" class="view">
+                <div class="view-header">
+                    <h2 id="client-form-title">Client Setup</h2>
+                    <p>Enter static client information.</p>
+                </div>
+                <div class="glass-card form-container" style="max-width: 1000px;">
+                    <form id="client-form">
+                        <input type="hidden" id="client_id">
+                        
+                        <div class="form-section">
+                            <label class="checkbox-label" style="font-size: 1.1rem; color: var(--primary); font-weight: 600; display:flex; align-items:center; gap:8px;">
+                                <input type="checkbox" id="is_joint" style="width:18px;height:18px;"> Is this a joint client / married couple?
+                            </label>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Primary Client</h3>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label>Name</label>
+                                    <input type="text" id="name" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Date of Birth</label>
+                                    <input type="date" id="dob">
+                                </div>
+                                <div class="input-group">
+                                    <label>SSN Last 4</label>
+                                    <input type="text" id="ssn_last4" maxlength="4">
+                                </div>
+                                <div class="input-group">
+                                    <label>Monthly Salary (After Tax)</label>
+                                    <input type="number" id="salary_client1" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section hidden" id="spouse-section">
+                            <h3>Spouse (Client 2)</h3>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label>Name</label>
+                                    <input type="text" id="spouse_name">
+                                </div>
+                                <div class="input-group">
+                                    <label>Date of Birth</label>
+                                    <input type="date" id="spouse_dob">
+                                </div>
+                                <div class="input-group">
+                                    <label>SSN Last 4</label>
+                                    <input type="text" id="spouse_ssn_last4" maxlength="4">
+                                </div>
+                                <div class="input-group">
+                                    <label>Monthly Salary (After Tax)</label>
+                                    <input type="number" id="salary_client2" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Financial Baseline</h3>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label>Agreed Expense Budget</label>
+                                    <input type="number" id="expense_budget" step="0.01" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Total Insurance Deductibles</label>
+                                    <input type="number" id="insurance_deductibles" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Accounts Structure</h3>
+                            <p class="text-sm">Define the accounts this client has. Build the taxonomy here.</p>
+                            <div id="accounts-container">
+                                <!-- Accounts injected here -->
+                            </div>
+                            <button type="button" class="btn btn-secondary mt-1" id="add-account-btn">+ Add Account</button>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-ghost" id="cancel-client-btn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Client Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Generate Report View -->
+            <section id="generate-report-view" class="view">
+                <div class="view-header">
+                    <h2>Generate Quarterly Report</h2>
+                    <p id="report-client-name" class="highlight-text"></p>
+                </div>
+                
+                <div class="glass-card form-container">
+                    <form id="report-form">
+                        <input type="hidden" id="report_client_id">
+                        
+                        <div class="form-section">
+                            <h3>Report Details</h3>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label>Report Date (a/o Date)</label>
+                                    <input type="date" id="report_date" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Current Balances</h3>
+                            <p class="text-sm">Enter the latest balance and cash amounts to hydrate the report.</p>
+                            <div id="balances-container" class="input-grid" style="grid-template-columns: 1fr;">
+                                <!-- Balance inputs injected here -->
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-ghost" id="cancel-report-btn">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="generate-btn">Generate PDFs</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="report-results" class="glass-card mt-2 hidden">
+                    <div class="success-banner">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        <h3>Reports Generated Successfully</h3>
+                    </div>
+                    <div class="download-actions">
+                        <a href="#" id="sacs-download" class="btn btn-secondary" target="_blank">Download SACS (Cashflow)</a>
+                        <a href="#" id="tcc-download" class="btn btn-secondary" target="_blank">Download TCC (Net Worth)</a>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
