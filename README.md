@@ -70,7 +70,7 @@ To run this portal on your local machine:
    ```
    *Note: On its first run, `app.py` automatically initializes the `database.sqlite` file and builds the required tables using the logic in `database.py`.*
 
-## 🌐 Deployment (Render & Railway)
+## Deployment (Render & Railway)
 
 This application is structurally prepared for instant deployment on PaaS platforms.
 
@@ -82,11 +82,7 @@ The repository includes a `render.yaml` file for **Render Blueprints**.
 ### 2. Railway
 The application is also configured for Railway. The SQLite connection engine uses the `RAILWAY_DATABASE_PATH` environment variable natively. Attach a Railway persistent volume and map this environment variable to seamlessly persist the firm's CRM data.
 
-### 3. Vercel (Serverless)
-The repository includes a `vercel.json` file for Serverless deployment. 
-- **Warning:** Vercel functions are read-only and ephemeral. The app uses `os.environ.get('VERCEL')` to route database writes and PDF generation to `/tmp` to prevent crashes, but all client data will be permanently wiped every few hours. Use Vercel for testing only, not for production SQLite storage.
-
-## 🔄 Resetting the Database
+## Resetting the Database
 During development, if you need to completely clear all clients and accounts and reset the database schema, simply run the utility script:
 ```bash
 python reset_db.py

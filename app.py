@@ -6,10 +6,7 @@ from datetime import datetime
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 
-if os.environ.get('VERCEL'):
-    REPORTS_DIR = '/tmp/reports'
-else:
-    REPORTS_DIR = os.path.join(os.path.dirname(__file__), 'reports')
+REPORTS_DIR = os.path.join(os.path.dirname(__file__), 'reports')
 os.makedirs(REPORTS_DIR, exist_ok=True)
 
 db.init_db()
